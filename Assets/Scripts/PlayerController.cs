@@ -1,3 +1,4 @@
+using Enums;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -63,11 +64,28 @@ public class PlayerController : MonoBehaviour
             movementSpeedXP += movementSpeedXPRate * Time.deltaTime;
 
         if (Input.GetKeyDown(KeyCode.Space))
+        {
             activeWeapon.Attack();
+            
+            //Apply the appropriate weapon xp increases
+            switch (activeWeapon.weaponStat)
+            {
+                case Stat.Strength:
+                    strengthXP += strengthXPRate;
+                    break;
+                case Stat.Dexterity:
+                    dexterityXP += dexterityXPRate;
+                    break;
+                case Stat.Magic:
+                    magicXP += magicXPRate;
+                    break;
+            }
+        }
+            
         
         //TODO: REMOVE AFTER TESTING
-        if (Input.GetKeyUp(KeyCode.LeftShift))
-            PlayerDeath();
+        if (Input.GetKeyDown(KeyCode.LeftShift))
+            GetComponent<HealthComponent>().HitTarget(5, Vector2.zero);
         
         Vector2 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         

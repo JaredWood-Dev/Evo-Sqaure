@@ -16,29 +16,41 @@ public class HealthComponent : MonoBehaviour
     public float knockbackResistance;
     
     private Rigidbody2D _rb;
+    private PlayerController _player;
 
     void Start()
     {
-        hitPoints = maxHitPoints;
-
         _rb = GetComponent<Rigidbody2D>();
+        _player = GetComponent<PlayerController>();
         if (!_rb)
             print("No Rigidbody2D component attached");
+
+        if (_player)
+        {
+            maxHitPoints = (int)PlayerStats.Instance.constitution;
+        }
+        hitPoints = maxHitPoints;
     }
 
-    public void ChangeHealth(int amount)
+    public bool ChangeHealth(int amount)
     {
-        if ((hitPoints += amount) <= 0)
+        if ((hitPoints += amount) < 1)
+        {
             KillTarget();
+            return false;
+        }
         if ((hitPoints += amount) >= maxHitPoints)
             hitPoints = maxHitPoints;
         else
             hitPoints += amount;
+        return true;
     }
 
     public void HitTarget(int amount, Vector2 force)
     {
-        ChangeHealth(-amount);
+        //If the target that was hit was the player, increase constitution XP
+        if (_player && ChangeHealth(-amount))
+            _player.constitutionXP += amount * _player.constitutionXPRate;
         _rb.AddForce(force * (1 - knockbackResistance), ForceMode2D.Impulse);
     }
 
@@ -49,8 +61,8 @@ public class HealthComponent : MonoBehaviour
 
     public void KillTarget()
     {
-        if (gameObject.GetComponent<PlayerController>())
-            gameObject.GetComponent<PlayerController>().PlayerDeath();
+        if (_player)
+            _player.PlayerDeath();
         else
             Destroy(gameObject);
     }
