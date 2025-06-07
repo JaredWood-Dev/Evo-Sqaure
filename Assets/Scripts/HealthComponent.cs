@@ -49,6 +49,9 @@ public class HealthComponent : MonoBehaviour
 
     public void KillTarget()
     {
-        Destroy(gameObject);
+        if (gameObject.GetComponent<PlayerController>())
+            gameObject.GetComponent<PlayerController>().PlayerDeath();
+        else
+            Destroy(gameObject);
     }
 }

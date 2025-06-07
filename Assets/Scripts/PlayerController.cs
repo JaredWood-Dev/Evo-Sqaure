@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class PlayerController : MonoBehaviour
 {
@@ -9,10 +10,26 @@ public class PlayerController : MonoBehaviour
     [Header("Stats")] 
     public float strength;
     public float dexterity;
-    public float movementSpeed;
+    public float movementSpeed; //TODO: IMPLEMENT LOGORITHMIC GROWTH
     public float constitution;
     public float magic;
-
+    
+    //In this context, "XP" is the amount of increase to each stat after the end of a run.
+    [Header("Experience and Rates")]
+    public float strengthXP;
+    public float dexterityXP;
+    public float movementSpeedXP;
+    public float constitutionXP;
+    public float magicXP;
+    
+    //Rates are how fast the XP builds up
+    [Space]
+    public float strengthXPRate;
+    public float dexterityXPRate;
+    public float movementSpeedXPRate;
+    public float constitutionXPRate;
+    public float magicXPRate;
+    
     [Header("Weapons")] 
     public GameObject heldWeapon = null;
     public Weapon activeWeapon = null;
@@ -22,6 +39,13 @@ public class PlayerController : MonoBehaviour
 
     void Start()
     {
+        //Init Stats
+        strength = PlayerStats.Instance.strength;
+        dexterity = PlayerStats.Instance.dexterity;
+        movementSpeed = PlayerStats.Instance.speed;
+        constitution = PlayerStats.Instance.constitution;
+        magic = PlayerStats.Instance.magic;
+        
         _rb = GetComponent<Rigidbody2D>();
         
         if (_rb == null)
@@ -34,11 +58,16 @@ public class PlayerController : MonoBehaviour
     void Update()
     {
         _input = new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
+        
+        if (_input != Vector2.zero )
+            movementSpeedXP += movementSpeedXPRate * Time.deltaTime;
 
         if (Input.GetKeyDown(KeyCode.Space))
-        {
             activeWeapon.Attack();
-        }
+        
+        //TODO: REMOVE AFTER TESTING
+        if (Input.GetKeyUp(KeyCode.LeftShift))
+            PlayerDeath();
         
         Vector2 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         
@@ -83,5 +112,26 @@ public class PlayerController : MonoBehaviour
     {
         if (other.CompareTag("Weapon"))
             AttachWeapon(other.gameObject);
+    }
+
+    public void PlayerDeath()
+    {
+        //Increase the stats
+        strength += strengthXP;
+        dexterity += dexterityXP;
+        movementSpeed += movementSpeedXP;
+        constitution += constitutionXP;
+        magic += magicXP;
+        
+        //Save the stats
+        PlayerStats.Instance.strength = strength;
+        PlayerStats.Instance.dexterity = dexterity;
+        PlayerStats.Instance.speed = movementSpeed;
+        PlayerStats.Instance.constitution = constitution;
+        PlayerStats.Instance.magic = magic;
+        
+        //Reload the Scene
+        //TODO: REPLACE WITH BETTER SCENE MANAGEMENT
+        SceneManager.LoadScene(0);
     }
 }
