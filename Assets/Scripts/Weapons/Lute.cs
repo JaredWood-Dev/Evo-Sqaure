@@ -1,13 +1,32 @@
+using System.Collections;
 using UnityEngine;
 
 public class Lute : Weapon
 {
+
+    public ParticleSystem lightningEffect;
+    private ParticleSystem _lightningSystem;
     public override void Attack()
     {
+        StartCoroutine(TickDamage());
+        _lightningSystem = Instantiate(lightningEffect, transform.position, Quaternion.identity);
+        _lightningSystem.transform.rotation = transform.localRotation;
+    }
+
+    IEnumerator TickDamage()
+    {
+        yield return new WaitForSeconds(attackSpeed);
+        
+        GetComponent<Animator>().SetBool("isCasting", true);
+        
+        _lightningSystem.transform.rotation = transform.parent.parent.rotation;
+        _lightningSystem.transform.position = transform.position + (transform.parent.parent.right * (range / 2));
+        
+        
         Vector2 origin = transform.position;
         Vector2 size = new Vector2(1, 1);
         float angle = transform.rotation.eulerAngles.z;
-        Vector2 direction = transform.right;
+        Vector2 direction = gameObject.transform.parent.transform.parent.transform.right;
         
         var targets = Physics2D.BoxCastAll(origin, size, angle, direction, range, targetLayer);
 
@@ -16,8 +35,18 @@ public class Lute : Weapon
             HealthComponent targetHealth = target.collider.GetComponent<HealthComponent>();
             if (targetHealth)
             {
-                targetHealth.HitTarget(damage, transform.position);
+                targetHealth.HitTarget(damage, Vector2.zero);
             }
+        }
+
+        if (Input.GetKey(KeyCode.Space))
+        {
+            StartCoroutine(TickDamage());
+        }
+        else
+        {
+            GetComponent<Animator>().SetBool("isCasting", false);
+            Destroy(_lightningSystem);
         }
     }
 }
