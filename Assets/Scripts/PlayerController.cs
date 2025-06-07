@@ -36,6 +36,7 @@ public class PlayerController : MonoBehaviour
     public GameObject playerHand;
     public GameObject heldWeapon = null;
     public Weapon activeWeapon = null;
+    private float _coolDown;
 
     private Rigidbody2D _rb;
     private Vector2 _input;
@@ -65,7 +66,7 @@ public class PlayerController : MonoBehaviour
         if (_input != Vector2.zero )
             movementSpeedXP += movementSpeedXPRate * Time.deltaTime;
 
-        if (Input.GetKeyDown(KeyCode.Space))
+        if (Input.GetKeyDown(KeyCode.Space) && _coolDown < 0)
         {
             activeWeapon.Attack();
             
@@ -82,8 +83,11 @@ public class PlayerController : MonoBehaviour
                     magicXP += magicXPRate;
                     break;
             }
+
+            _coolDown = activeWeapon.attackSpeed;
         }
             
+        _coolDown -= 0.1f;
         
         //TODO: REMOVE AFTER TESTING
         if (Input.GetKeyDown(KeyCode.LeftShift))

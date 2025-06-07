@@ -54,7 +54,6 @@ public class HealthComponent : MonoBehaviour
 
     public void HitTarget(int amount, Vector2 force)
     {
-        print(gameObject + " was hit for " + amount);
         //If the target that was hit was the player, increase constitution XP
         if (ChangeHealth(-amount))
         {
