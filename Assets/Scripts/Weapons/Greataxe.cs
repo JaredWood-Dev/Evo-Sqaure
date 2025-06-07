@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 
 public class Greataxe : Weapon
@@ -5,12 +6,18 @@ public class Greataxe : Weapon
     /*
      * The Greataxe uses Strength, and is slow, but powerful attacks.
      */
-    
+    public float attackDelay;
     public override void Attack()
     {
         gameObject.GetComponent<Animator>().SetTrigger("attack");
-        print("Swung Greataxe for " + damage + " damage, using " + weaponStat);
 
+        StartCoroutine(CompleteAttack());
+    }
+
+    IEnumerator CompleteAttack()
+    {
+        yield return new WaitForSeconds(attackDelay);
+        
         Vector2 origin = transform.position;
         Vector2 size = new Vector2(1, 2);
         float angle = transform.rotation.eulerAngles.z;

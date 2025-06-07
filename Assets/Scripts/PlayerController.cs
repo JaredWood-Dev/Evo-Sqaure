@@ -1,3 +1,4 @@
+using System.Collections;
 using Enums;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -30,8 +31,9 @@ public class PlayerController : MonoBehaviour
     public float movementSpeedXPRate;
     public float constitutionXPRate;
     public float magicXPRate;
-    
+
     [Header("Weapons")] 
+    public GameObject playerHand;
     public GameObject heldWeapon = null;
     public Weapon activeWeapon = null;
 
@@ -107,10 +109,10 @@ public class PlayerController : MonoBehaviour
 
     void MoveWeapon()
     {
-        if (heldWeapon)
+        if (playerHand)
         {
-            heldWeapon.transform.position = transform.position + transform.right * 1;
-            heldWeapon.transform.rotation = transform.rotation;
+            //playerHand.transform.position = transform.position + transform.right * 1;
+            //playerHand.transform.rotation = transform.rotation;
         }
     }
 
@@ -119,11 +121,21 @@ public class PlayerController : MonoBehaviour
         if (heldWeapon)
             RemoveWeapon();
         heldWeapon = weapon;
+        activeWeapon = weapon.GetComponent<Weapon>();
+        heldWeapon.GetComponent<RotateObject>().enabled = false;
+        
+        weapon.transform.SetParent(playerHand.transform);
+        weapon.GetComponent<Animator>().enabled = true; 
     }
 
     void RemoveWeapon()
     {
+        heldWeapon.GetComponent<RotateObject>().enabled = true;
+        heldWeapon.GetComponent<Animator>().enabled = false;
+        heldWeapon.transform.parent = null;
+        heldWeapon.transform.position = transform.position + (Vector3.up * -1.5f);
         heldWeapon = null;
+        activeWeapon = null;
     }
 
     void OnTriggerEnter2D(Collider2D other)
@@ -148,8 +160,17 @@ public class PlayerController : MonoBehaviour
         PlayerStats.Instance.constitution = constitution;
         PlayerStats.Instance.magic = magic;
         
+        GetComponent<Renderer>().enabled = false;
+        
         //Reload the Scene
         //TODO: REPLACE WITH BETTER SCENE MANAGEMENT
+        StartCoroutine(ReloadScene());
+    }
+
+    IEnumerator ReloadScene()
+    {
+        yield return new WaitForSeconds(0.5f);
+        
         SceneManager.LoadScene(0);
     }
 }

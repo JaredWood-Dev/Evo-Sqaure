@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using UnityEngine;
 
 public class HealthComponent : MonoBehaviour
@@ -14,6 +15,10 @@ public class HealthComponent : MonoBehaviour
     [Header("Defenses")] 
     [Range(-1,1)]
     public float knockbackResistance;
+    
+    [Header("Effects")]
+    public ParticleSystem deathEffect;
+    public ParticleSystem hurtEffect;
     
     private Rigidbody2D _rb;
     private PlayerController _player;
@@ -34,12 +39,13 @@ public class HealthComponent : MonoBehaviour
 
     public bool ChangeHealth(int amount)
     {
-        if ((hitPoints += amount) < 1)
+        print("dealing " + amount + "damage");
+        if ((hitPoints + amount) < 1)
         {
             KillTarget();
             return false;
         }
-        if ((hitPoints += amount) >= maxHitPoints)
+        if ((hitPoints + amount) >= maxHitPoints)
             hitPoints = maxHitPoints;
         else
             hitPoints += amount;
@@ -48,10 +54,20 @@ public class HealthComponent : MonoBehaviour
 
     public void HitTarget(int amount, Vector2 force)
     {
+        print(gameObject + " was hit for " + amount);
         //If the target that was hit was the player, increase constitution XP
-        if (_player && ChangeHealth(-amount))
-            _player.constitutionXP += amount * _player.constitutionXPRate;
+        if (ChangeHealth(-amount))
+        {
+            if (_player)
+            {
+                _player.constitutionXP += amount * _player.constitutionXPRate;
+            }
+        }
+
         _rb.AddForce(force * (1 - knockbackResistance), ForceMode2D.Impulse);
+        
+        if (hurtEffect)
+            Instantiate(hurtEffect, transform.position, Quaternion.identity);
     }
 
     public void HealTarget(int amount)
@@ -61,6 +77,10 @@ public class HealthComponent : MonoBehaviour
 
     public void KillTarget()
     {
+        if (deathEffect)
+        {
+            ParticleSystem effect = Instantiate(deathEffect, transform.position, Quaternion.identity);
+        }
         if (_player)
             _player.PlayerDeath();
         else
