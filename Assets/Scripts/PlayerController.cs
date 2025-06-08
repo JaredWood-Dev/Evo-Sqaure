@@ -177,4 +177,27 @@ public class PlayerController : MonoBehaviour
         
         SceneManager.LoadScene(0);
     }
+
+    void OnTriggerExit2D(Collider2D other)
+    {
+        if (other.CompareTag("Room"))
+        {
+            if (transform.position.x - other.transform.position.x > 10)
+            {
+                Camera.main.GetComponent<CameraController>().ShiftCamera(Direction.East);
+            }
+            if (transform.position.x - other.transform.position.x < -10)
+            {
+                Camera.main.GetComponent<CameraController>().ShiftCamera(Direction.West);
+            }
+            if (transform.position.y - other.transform.position.y > 10)
+            {
+                Camera.main.GetComponent<CameraController>().ShiftCamera(Direction.North);
+            }
+            if (transform.position.y - other.transform.position.y < -10)
+            {
+                Camera.main.GetComponent<CameraController>().ShiftCamera(Direction.South);
+            }
+        }
+    }
 }

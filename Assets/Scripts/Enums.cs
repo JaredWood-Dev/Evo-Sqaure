@@ -10,4 +10,12 @@ namespace Enums
         Constitution,
         Magic,
     }
+
+    public enum Direction
+    {
+        North,
+        East,
+        South,
+        West,
+    }
 }
