@@ -44,7 +44,7 @@ public class AIComponent : MonoBehaviour
         
         Vector2 locDiff = location - (Vector2)transform.position;
         Vector2 neededSpeed = locDiff * movementSpeed;
-        Vector2 forceVector = (neededSpeed - _rb.linearVelocity) / Time.fixedDeltaTime;
+        Vector2 forceVector = (neededSpeed - _rb.linearVelocity);
         _rb.AddForce(forceVector);
     }
 
@@ -61,9 +61,7 @@ public class AIComponent : MonoBehaviour
     {
         Vector2 target = (Vector2)transform.position + new Vector2(Random.Range(-2f, 2f), Random.Range(-2f, 2f)); 
         
-        while (Vector2.Distance(transform.position, target) > 0.1f)
-            MoveTo(target);
-        
+        MoveTo(target);
     }
 
     GameObject LocatePlayer(float distance)

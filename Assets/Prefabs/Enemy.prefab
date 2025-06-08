@@ -198,7 +198,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1b0a2023b0a828749bc9d5c186a87028, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  movementSpeed: 2
+  movementSpeed: 1
   playerTarget: {fileID: 0}
   minForce: 3
   maxForce: 5

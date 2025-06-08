@@ -1,5 +1,6 @@
 using System.Collections;
 using Enums;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -67,27 +68,30 @@ public class PlayerController : MonoBehaviour
         if (_input != Vector2.zero )
             movementSpeedXP += movementSpeedXPRate * Time.deltaTime;
 
-        if (Input.GetKeyDown(KeyCode.Space) && _coolDown < 0)
+        if (heldWeapon)
         {
-            activeWeapon.Attack();
-            
-            //Apply the appropriate weapon xp increases
-            switch (activeWeapon.weaponStat)
+            if (Input.GetKeyDown(KeyCode.Space) && _coolDown < 0)
             {
-                case Stat.Strength:
-                    strengthXP += strengthXPRate;
-                    break;
-                case Stat.Dexterity:
-                    dexterityXP += dexterityXPRate;
-                    break;
-                case Stat.Magic:
-                    magicXP += magicXPRate;
-                    break;
-            }
+                activeWeapon.Attack();
 
-            _coolDown = activeWeapon.attackSpeed;
+                //Apply the appropriate weapon xp increases
+                switch (activeWeapon.weaponStat)
+                {
+                    case Stat.Strength:
+                        strengthXP += strengthXPRate;
+                        break;
+                    case Stat.Dexterity:
+                        dexterityXP += dexterityXPRate;
+                        break;
+                    case Stat.Magic:
+                        magicXP += magicXPRate;
+                        break;
+                }
+
+                _coolDown = activeWeapon.attackSpeed;
+            }
         }
-            
+
         _coolDown -= 0.1f;
         
         //TODO: REMOVE AFTER TESTING
@@ -148,8 +152,13 @@ public class PlayerController : MonoBehaviour
         if (other.CompareTag("Weapon"))
             AttachWeapon(other.gameObject);
         
-        if (other.CompareTag("Room"))
-            _canMoveCamera = true;
+        if (other.gameObject.CompareTag("Room"))
+        {
+            print("moving camera!");
+            if (Camera.main != null)
+                Camera.main.GetComponent<CameraController>()
+                    .ShiftCamera(other.transform.parent.GetComponent<RoomComponent>().roomLocation);
+        }
     }
 
     public void PlayerDeath()
@@ -184,31 +193,6 @@ public class PlayerController : MonoBehaviour
 
     void OnTriggerExit2D(Collider2D other)
     {
-        if (_canMoveCamera)
-        {
-            _canMoveCamera = false;
-            if (other.CompareTag("Room"))
-            {
-                if (transform.position.x - other.transform.position.x > 10)
-                {
-                    Camera.main.GetComponent<CameraController>().ShiftCamera(Direction.East);
-                }
-
-                if (transform.position.x - other.transform.position.x < -10)
-                {
-                    Camera.main.GetComponent<CameraController>().ShiftCamera(Direction.West);
-                }
-
-                if (transform.position.y - other.transform.position.y > 10)
-                {
-                    Camera.main.GetComponent<CameraController>().ShiftCamera(Direction.North);
-                }
-
-                if (transform.position.y - other.transform.position.y < -10)
-                {
-                    Camera.main.GetComponent<CameraController>().ShiftCamera(Direction.South);
-                }
-            }
-        }
+        
     }
 }

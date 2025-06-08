@@ -11,9 +11,10 @@ public class EnemySpawner : MonoBehaviour
     {
         for (int i = 0; i < difficulty; i++)
         {
-            float x = Random.Range(-10f, 10f);
-            float y = Random.Range(-10f, 10f);
-            Instantiate(basicEnemy, transform.parent.position += new Vector3(x, y), Quaternion.identity);
+            float x = Random.Range(-5, 5);
+            float y = Random.Range(-5, 5);
+            GameObject newEnemy = Instantiate(basicEnemy, transform.parent.position, Quaternion.identity);
+            newEnemy.transform.localPosition = new Vector3(transform.position.x + x, transform.position.y + y, 0);
         }
     }
 }

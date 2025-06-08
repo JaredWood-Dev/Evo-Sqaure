@@ -22,6 +22,9 @@ public class RoomComponent : MonoBehaviour
     public GameObject southDoor;
     public GameObject westDoor;
 
+    [Header("Dungeon Map")] 
+    public Vector2 roomLocation;
+
     public void SetPath(Direction direction, bool open)
     {
         switch (direction)
