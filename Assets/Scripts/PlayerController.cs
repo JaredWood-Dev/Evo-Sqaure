@@ -41,7 +41,6 @@ public class PlayerController : MonoBehaviour
 
     private Rigidbody2D _rb;
     private Vector2 _input;
-    private bool _canMoveCamera = true;
 
     void Start()
     {
@@ -154,7 +153,6 @@ public class PlayerController : MonoBehaviour
         
         if (other.gameObject.CompareTag("Room"))
         {
-            print("moving camera!");
             if (Camera.main != null)
                 Camera.main.GetComponent<CameraController>()
                     .ShiftCamera(other.transform.parent.GetComponent<RoomComponent>().roomLocation);
@@ -178,16 +176,9 @@ public class PlayerController : MonoBehaviour
         PlayerStats.Instance.magic = magic;
         
         GetComponent<Renderer>().enabled = false;
+        GetComponent<Collider2D>().enabled = false;
         
         //Reload the Scene
-        //TODO: REPLACE WITH BETTER SCENE MANAGEMENT
-        StartCoroutine(ReloadScene());
-    }
-
-    IEnumerator ReloadScene()
-    {
-        yield return new WaitForSeconds(0.5f);
-        
-        SceneManager.LoadScene(0);
+        GameObject.Find("GameManager").GetComponent<SceneManagerComponent>().PlayerDeath();
     }
 }

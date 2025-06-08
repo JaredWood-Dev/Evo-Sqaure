@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 2566884492283587677}
   - component: {fileID: 3165673984709424521}
   - component: {fileID: 3293817289211239408}
+  - component: {fileID: 7696973079174005980}
   m_Layer: 0
   m_Name: Lightning Effect
   m_TagString: Untagged
@@ -4833,3 +4834,16 @@ ParticleSystemRenderer:
   m_MeshWeighting2: 1
   m_MeshWeighting3: 1
   m_MaskInteraction: 0
+--- !u!114 &7696973079174005980
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6992289134929184612}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: da2fb0bbedf128240a30ae1d49a5af05, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  time: 5

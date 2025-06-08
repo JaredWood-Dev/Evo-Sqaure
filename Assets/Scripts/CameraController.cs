@@ -30,8 +30,6 @@ public class CameraController : MonoBehaviour
 
     public void ShiftCamera(Vector2 nextRoom)
     {
-        print("moving to room " + nextRoom);
-        
         GameObject targetRoom = _dc.DungeonMap[nextRoom];
         
         currentCamPos = new Vector3(transform.position.x, transform.position.y, -10);

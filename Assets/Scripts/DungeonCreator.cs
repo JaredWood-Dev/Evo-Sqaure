@@ -27,7 +27,5 @@ public class DungeonCreator : MonoBehaviour
             newRoom.GetComponent<RoomComponent>().roomLocation = new Vector2(i, 0);
             DungeonMap.Add(new Vector2(i,0), newRoom);
         }
-        
-        print(DungeonMap);
     }
 }

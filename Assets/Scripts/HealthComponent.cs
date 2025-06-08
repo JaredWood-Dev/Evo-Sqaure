@@ -39,7 +39,6 @@ public class HealthComponent : MonoBehaviour
 
     public bool ChangeHealth(int amount)
     {
-        print("dealing " + amount + "damage");
         if ((hitPoints + amount) < 1)
         {
             KillTarget();
