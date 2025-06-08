@@ -190,9 +190,4 @@ public class PlayerController : MonoBehaviour
         
         SceneManager.LoadScene(0);
     }
-
-    void OnTriggerExit2D(Collider2D other)
-    {
-        
-    }
 }

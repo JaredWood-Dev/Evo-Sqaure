@@ -6,8 +6,7 @@ public class AIComponent : MonoBehaviour
     [Header("Movement")]
     public float movementSpeed;
     public GameObject playerTarget;
-    public float minForce;
-    public float maxForce;
+    public Vector2 wanderTarget;
     
     [Header("Combat")]
     public int damage;
@@ -21,6 +20,8 @@ public class AIComponent : MonoBehaviour
     void Start()
     {
         _rb = GetComponent<Rigidbody2D>();
+        
+        PickNewWanderTarget();
     }
 
     void Update()
@@ -32,7 +33,12 @@ public class AIComponent : MonoBehaviour
         }
         else
         {
-            Wander();
+            MoveTo(wanderTarget);
+        }
+        
+        if ((Random.Range(0, 50) == 50) || Vector3.Distance(transform.position, wanderTarget) < 0.2f)
+        {
+            PickNewWanderTarget();
         }
     }
     
@@ -57,13 +63,6 @@ public class AIComponent : MonoBehaviour
         }
     }
 
-    void Wander()
-    {
-        Vector2 target = (Vector2)transform.position + new Vector2(Random.Range(-2f, 2f), Random.Range(-2f, 2f)); 
-        
-        MoveTo(target);
-    }
-
     GameObject LocatePlayer(float distance)
     {
         GameObject player = GameObject.FindGameObjectWithTag("Player");
@@ -71,11 +70,16 @@ public class AIComponent : MonoBehaviour
         {
             if (Vector2.Distance(transform.position, player.transform.position) < distance)
             {
+                PickNewWanderTarget();
                 return player;
             }
         }
         return null;
     }
-    
+
+    void PickNewWanderTarget()
+    {
+        wanderTarget = new Vector2(transform.position.x + Random.Range(-5, 5), transform.position.y + Random.Range(-5, 5));
+    }
     
 }
