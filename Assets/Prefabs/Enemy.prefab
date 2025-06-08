@@ -200,11 +200,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   movementSpeed: 1
   playerTarget: {fileID: 0}
-  minForce: 3
-  maxForce: 5
+  wanderTarget: {x: 0, y: 0}
   damage: 1
   knockBack: 200
-  aggroDistance: 5
+  aggroDistance: 10
 --- !u!60 &2649186365748096215
 PolygonCollider2D:
   m_ObjectHideFlags: 0
