@@ -7,6 +7,7 @@ public class Greataxe : Weapon
      * The Greataxe uses Strength, and is slow, but powerful attacks.
      */
     public float attackDelay;
+    public float hitMarkTime;
     public override void Attack()
     {
         gameObject.GetComponent<Animator>().SetTrigger("attack");

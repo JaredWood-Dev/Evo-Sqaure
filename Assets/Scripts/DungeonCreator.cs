@@ -12,7 +12,7 @@ public class DungeonCreator : MonoBehaviour
 
     void Start()
     {
-        GameObject startRoom = Instantiate(dungeonRooms[0], new Vector3(0, 0, 25), Quaternion.identity);
+        GameObject startRoom = Instantiate(dungeonRooms[1], new Vector3(0, 0, 25), Quaternion.identity);
         startRoom.GetComponent<RoomComponent>().east = true;
         DungeonMap.Add(new Vector2(0,0), startRoom);
         

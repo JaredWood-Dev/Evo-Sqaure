@@ -40,6 +40,7 @@ public class PlayerController : MonoBehaviour
 
     private Rigidbody2D _rb;
     private Vector2 _input;
+    private bool _canMoveCamera = true;
 
     void Start()
     {
@@ -146,6 +147,9 @@ public class PlayerController : MonoBehaviour
     {
         if (other.CompareTag("Weapon"))
             AttachWeapon(other.gameObject);
+        
+        if (other.CompareTag("Room"))
+            _canMoveCamera = true;
     }
 
     public void PlayerDeath()
@@ -180,23 +184,30 @@ public class PlayerController : MonoBehaviour
 
     void OnTriggerExit2D(Collider2D other)
     {
-        if (other.CompareTag("Room"))
+        if (_canMoveCamera)
         {
-            if (transform.position.x - other.transform.position.x > 10)
+            _canMoveCamera = false;
+            if (other.CompareTag("Room"))
             {
-                Camera.main.GetComponent<CameraController>().ShiftCamera(Direction.East);
-            }
-            if (transform.position.x - other.transform.position.x < -10)
-            {
-                Camera.main.GetComponent<CameraController>().ShiftCamera(Direction.West);
-            }
-            if (transform.position.y - other.transform.position.y > 10)
-            {
-                Camera.main.GetComponent<CameraController>().ShiftCamera(Direction.North);
-            }
-            if (transform.position.y - other.transform.position.y < -10)
-            {
-                Camera.main.GetComponent<CameraController>().ShiftCamera(Direction.South);
+                if (transform.position.x - other.transform.position.x > 10)
+                {
+                    Camera.main.GetComponent<CameraController>().ShiftCamera(Direction.East);
+                }
+
+                if (transform.position.x - other.transform.position.x < -10)
+                {
+                    Camera.main.GetComponent<CameraController>().ShiftCamera(Direction.West);
+                }
+
+                if (transform.position.y - other.transform.position.y > 10)
+                {
+                    Camera.main.GetComponent<CameraController>().ShiftCamera(Direction.North);
+                }
+
+                if (transform.position.y - other.transform.position.y < -10)
+                {
+                    Camera.main.GetComponent<CameraController>().ShiftCamera(Direction.South);
+                }
             }
         }
     }

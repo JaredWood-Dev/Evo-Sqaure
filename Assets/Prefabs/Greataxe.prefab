@@ -105,13 +105,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   damage: 5
   range: 1
-  attackSpeed: 10
-  knockback: 5
+  attackSpeed: 5
+  knockback: 10
   weaponStat: 0
   targetLayer:
     serializedVersion: 2
     m_Bits: 256
   attackDelay: 0.2
+  hitMarkTime: 0.1
 --- !u!58 &9057360375965311960
 CircleCollider2D:
   m_ObjectHideFlags: 0

@@ -17,11 +17,13 @@ public class CameraController : MonoBehaviour
     void Start()
     {
         _dc = gameManager.GetComponent<DungeonCreator>();
+        currentCamPos = new Vector3(0, 0, -10);
+        targetCamPos = new Vector3(0, 0, -10);
     }
 
     void Update()
     {
-        _cameraTime += Time.deltaTime;
+        _cameraTime += Time.deltaTime * cameraMoveSpeed;
         _cameraTime = Mathf.Clamp(_cameraTime, 0.0f, 3.0f);
         gameObject.transform.position = Vector3.Lerp(currentCamPos, targetCamPos, Mathf.Sin(_cameraTime - (Mathf.PI / 2)) * 0.5f + 0.5f);
     }
