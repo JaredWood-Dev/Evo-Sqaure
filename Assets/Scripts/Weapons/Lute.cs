@@ -6,11 +6,15 @@ public class Lute : Weapon
 
     public ParticleSystem lightningEffect;
     private ParticleSystem _lightningSystem;
+    public float spellDuration = 4f;
+    private float _spellTimer = 0f;
     public override void Attack()
     {
         StartCoroutine(TickDamage());
         _lightningSystem = Instantiate(lightningEffect, transform.position, Quaternion.identity);
         _lightningSystem.transform.rotation = transform.localRotation;
+        
+        _spellTimer = spellDuration;
     }
 
     IEnumerator TickDamage()
@@ -35,11 +39,12 @@ public class Lute : Weapon
             HealthComponent targetHealth = target.collider.GetComponent<HealthComponent>();
             if (targetHealth)
             {
-                targetHealth.HitTarget(damage, Vector2.zero);
+                targetHealth.HitTarget(damage + (int)playerController.magic, Vector2.zero);
+                ApplyXP();
             }
         }
 
-        if (Input.GetKey(KeyCode.Space))
+        if (Input.GetKey(KeyCode.Space) && _spellTimer > 0)
         {
             StartCoroutine(TickDamage());
         }
@@ -48,5 +53,10 @@ public class Lute : Weapon
             GetComponent<Animator>().SetBool("isCasting", false);
             Destroy(_lightningSystem);
         }
+    }
+    
+    void FixedUpdate()
+    {
+            _spellTimer -= Time.fixedDeltaTime;
     }
 }

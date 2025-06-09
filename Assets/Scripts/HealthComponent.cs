@@ -1,6 +1,9 @@
 using System;
 using System.Collections;
+using Enums;
+using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class HealthComponent : MonoBehaviour
 {
@@ -19,6 +22,12 @@ public class HealthComponent : MonoBehaviour
     [Header("Effects")]
     public ParticleSystem deathEffect;
     public ParticleSystem hurtEffect;
+    public GameObject textPrefab;
+
+    [Header("Stunning")] 
+    public bool isStunned = false;
+    public float stunDuration = 0.1f;
+    private float _stunTimer = 0.0f;
     
     private Rigidbody2D _rb;
     private PlayerController _player;
@@ -35,6 +44,8 @@ public class HealthComponent : MonoBehaviour
             maxHitPoints = (int)PlayerStats.Instance.constitution;
         }
         hitPoints = maxHitPoints;
+
+        textPrefab = GameObject.Find("Damage Amount Holder");
     }
 
     public bool ChangeHealth(int amount)
@@ -61,11 +72,17 @@ public class HealthComponent : MonoBehaviour
                 _player.constitutionXP += amount * _player.constitutionXPRate;
             }
         }
-
-        _rb.AddForce(force * (1 - knockbackResistance), ForceMode2D.Impulse);
         
         if (hurtEffect)
             Instantiate(hurtEffect, transform.position, Quaternion.identity);
+        
+        SpawnNumber(amount, Color.white);
+        
+        isStunned = true;
+        _rb.linearVelocity = Vector2.zero;
+        _stunTimer = stunDuration;
+        
+        _rb.AddForce(force * (1 - knockbackResistance), ForceMode2D.Impulse);
     }
 
     public void HealTarget(int amount)
@@ -83,5 +100,30 @@ public class HealthComponent : MonoBehaviour
             _player.PlayerDeath();
         else
             Destroy(gameObject);
+    }
+
+    public void SpawnNumber(int num, Color color)
+    {
+        var text = Instantiate(textPrefab, transform.position, Quaternion.identity);
+        text.transform.GetChild(0).GetComponent<TextMeshPro>().text = num.ToString();
+        text.transform.GetChild(0).GetComponent<TextMeshPro>().color = color;
+        text.GetComponent<DestroyAfterTime>().enabled = true;
+
+        StartCoroutine(DeleteNumber(text));
+    }
+
+    IEnumerator DeleteNumber(GameObject number)
+    {
+        yield return new WaitForSeconds(1);
+        
+        Destroy(number);
+    }
+
+    void Update()
+    {
+        if (_stunTimer < 0)
+            isStunned = false;
+        
+        _stunTimer -= Time.fixedDeltaTime;
     }
 }

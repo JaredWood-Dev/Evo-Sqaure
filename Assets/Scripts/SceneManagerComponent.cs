@@ -16,7 +16,6 @@ public class SceneManagerComponent : MonoBehaviour
     public Text magicLabel;
 
     private bool _canRestart = false;
-    private float _timer;
 
     void Start()
     {
@@ -31,8 +30,6 @@ public class SceneManagerComponent : MonoBehaviour
         HUD.SetActive(false);
         deathScreen.SetActive(true);
         Time.timeScale = 0;
-        
-        _timer = 0;
         
         strengthLabel.text = Player.GetComponent<PlayerController>().strength.ToString("0000") + " + " + Player.GetComponent<PlayerController>().strengthXP.ToString("000");
         dexterityLabel.text = Player.GetComponent<PlayerController>().dexterity.ToString("0000") + " + " + Player.GetComponent<PlayerController>().dexterityXP.ToString("000");

@@ -16,10 +16,12 @@ public class AIComponent : MonoBehaviour
     
 
     private Rigidbody2D _rb;
+    private HealthComponent _healthComponent;
 
     void Start()
     {
         _rb = GetComponent<Rigidbody2D>();
+        _healthComponent = GetComponent<HealthComponent>();
         
         PickNewWanderTarget();
     }
@@ -27,15 +29,18 @@ public class AIComponent : MonoBehaviour
     void Update()
     {
         playerTarget = LocatePlayer(aggroDistance);
-        if (playerTarget)
+        if (!_healthComponent.isStunned)
         {
-            MoveTo(playerTarget.transform.position);
+            if (playerTarget)
+            {
+                MoveTo(playerTarget.transform.position);
+            }
+            else
+            {
+                MoveTo(wanderTarget);
+            }
         }
-        else
-        {
-            MoveTo(wanderTarget);
-        }
-        
+
         if ((Random.Range(0, 50) == 50) || Vector3.Distance(transform.position, wanderTarget) < 0.2f)
         {
             PickNewWanderTarget();
@@ -51,7 +56,9 @@ public class AIComponent : MonoBehaviour
         Vector2 locDiff = location - (Vector2)transform.position;
         Vector2 neededSpeed = locDiff * movementSpeed;
         Vector2 forceVector = (neededSpeed - _rb.linearVelocity);
-        _rb.AddForce(forceVector);
+        
+        if (!_healthComponent.isStunned)
+            _rb.AddForce(forceVector);
     }
 
     void OnCollisionEnter2D(Collision2D other)

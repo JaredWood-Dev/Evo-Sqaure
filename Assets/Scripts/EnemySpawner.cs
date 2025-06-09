@@ -28,7 +28,7 @@ public class EnemySpawner : MonoBehaviour
 
         if (canSpawn)
         {
-            for (int i = 0; i < difficulty % 10; i++)
+            for (int i = 0; i < Random.Range(2, 5); i++)
             {
                 float x = Random.Range(-5, 5);
                 float y = Random.Range(-5, 5);

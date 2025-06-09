@@ -13,7 +13,7 @@ public class PlayerController : MonoBehaviour
     [Header("Stats")] 
     public float strength;
     public float dexterity;
-    public float movementSpeed; //TODO: IMPLEMENT LOGORITHMIC GROWTH
+    public float movementSpeed;
     public float constitution;
     public float magic;
     
@@ -41,6 +41,7 @@ public class PlayerController : MonoBehaviour
 
     private Rigidbody2D _rb;
     private Vector2 _input;
+    private HealthComponent _healthComponent;
 
     void Start()
     {
@@ -52,6 +53,7 @@ public class PlayerController : MonoBehaviour
         magic = PlayerStats.Instance.magic;
         
         _rb = GetComponent<Rigidbody2D>();
+        _healthComponent = GetComponent<HealthComponent>();
         
         if (_rb == null)
             print("No Rigidbody Attached.");
@@ -72,20 +74,6 @@ public class PlayerController : MonoBehaviour
             if (Input.GetKeyDown(KeyCode.Space) && _coolDown < 0)
             {
                 activeWeapon.Attack();
-
-                //Apply the appropriate weapon xp increases
-                switch (activeWeapon.weaponStat)
-                {
-                    case Stat.Strength:
-                        strengthXP += strengthXPRate;
-                        break;
-                    case Stat.Dexterity:
-                        dexterityXP += dexterityXPRate;
-                        break;
-                    case Stat.Magic:
-                        magicXP += magicXPRate;
-                        break;
-                }
 
                 _coolDown = activeWeapon.attackSpeed;
             }

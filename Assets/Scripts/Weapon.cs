@@ -13,6 +13,29 @@ public abstract class Weapon : MonoBehaviour
     public float knockback; //The knock-back power of the weapon.
     public Stat weaponStat; //The Stat the weapon uses for damage.
     public LayerMask targetLayer;
+    public PlayerController playerController;
 
+
+    void Start()
+    {
+        playerController = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerController>();
+    }
+
+    public void ApplyXP()
+    {
+        //Apply the appropriate weapon xp increases
+        switch (playerController.activeWeapon.weaponStat)
+        {
+            case Stat.Strength:
+                playerController.strengthXP += playerController.strengthXPRate;
+                break;
+            case Stat.Dexterity:
+                playerController.dexterityXP += playerController.dexterityXPRate;
+                break;
+            case Stat.Magic:
+                playerController.magicXP += playerController.magicXPRate;
+                break;
+        }
+    }
     public abstract void Attack();
 }

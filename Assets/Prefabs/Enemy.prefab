@@ -109,6 +109,9 @@ MonoBehaviour:
   knockbackResistance: -1
   deathEffect: {fileID: 5120425921998992154, guid: 1295c87e92382ba4ea421d86b09d2c7a, type: 3}
   hurtEffect: {fileID: 2219741279700966067, guid: 1e991ae2eada0374cbc2137674888cae, type: 3}
+  textPrefab: {fileID: 0}
+  isStunned: 0
+  stunDuration: 0.1
 --- !u!50 &2346296034006219075
 Rigidbody2D:
   serializedVersion: 5

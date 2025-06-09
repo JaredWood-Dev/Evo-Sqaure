@@ -22,7 +22,8 @@ public class Scimitar : Weapon
             if (targetComponent)
             {
                 Vector2 knockbackForce = (target.transform.position - transform.position) * knockback;
-                targetComponent.HitTarget(damage, knockbackForce);
+                targetComponent.HitTarget(damage + (int)playerController.dexterity, knockbackForce);
+                ApplyXP();
             }
         }
     }

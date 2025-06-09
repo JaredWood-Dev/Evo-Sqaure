@@ -10,8 +10,8 @@ public class CameraController : MonoBehaviour
 
     private DungeonCreator _dc;
     public float _cameraTime = 0.0f;
-    private Vector3 currentCamPos;
-    private Vector3 targetCamPos;
+    public Vector3 currentCamPos;
+    public Vector3 targetCamPos;
     
 
     void Start()

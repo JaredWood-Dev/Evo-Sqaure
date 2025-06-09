@@ -34,7 +34,9 @@ public class Greataxe : Weapon
             {
                 Vector2 knockbackForce = (target.transform.position - transform.position) * knockback;
                 
-                targetHealthComponent.HitTarget(damage, knockbackForce);
+                targetHealthComponent.HitTarget(damage + (int)playerController.strength, knockbackForce);
+                
+                ApplyXP();
             }
         }
     }
