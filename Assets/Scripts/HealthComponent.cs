@@ -4,6 +4,7 @@ using Enums;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using Random = UnityEngine.Random;
 
 public class HealthComponent : MonoBehaviour
 {
@@ -31,11 +32,13 @@ public class HealthComponent : MonoBehaviour
     
     private Rigidbody2D _rb;
     private PlayerController _player;
+    private AudioSource _as;
 
     void Start()
     {
         _rb = GetComponent<Rigidbody2D>();
         _player = GetComponent<PlayerController>();
+        _as = GetComponent<AudioSource>();
         if (!_rb)
             print("No Rigidbody2D component attached");
 
@@ -64,6 +67,9 @@ public class HealthComponent : MonoBehaviour
 
     public void HitTarget(int amount, Vector2 force)
     {
+        _as.pitch = _as.pitch = Random.Range(0.9f, 1.1f);
+        _as.Play();
+        
         //If the target that was hit was the player, increase constitution XP
         if (ChangeHealth(-amount))
         {
@@ -76,7 +82,12 @@ public class HealthComponent : MonoBehaviour
         if (hurtEffect)
             Instantiate(hurtEffect, transform.position, Quaternion.identity);
         
-        SpawnNumber(amount, Color.white);
+        if (_player)
+            SpawnNumber(amount, Color.red);
+        else if (GameObject.Find("Player").GetComponent<PlayerController>().activeWeapon.weaponStat == Stat.Magic)
+            SpawnNumber(amount, Color.blue);
+        else
+            SpawnNumber(amount, Color.white);
         
         isStunned = true;
         _rb.linearVelocity = Vector2.zero;

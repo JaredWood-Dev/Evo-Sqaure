@@ -15,6 +15,7 @@ public class Lute : Weapon
         _lightningSystem.transform.rotation = transform.localRotation;
         
         _spellTimer = spellDuration;
+        GetComponent<AudioSource>().Play();
     }
 
     IEnumerator TickDamage()
@@ -52,6 +53,7 @@ public class Lute : Weapon
         {
             GetComponent<Animator>().SetBool("isCasting", false);
             Destroy(_lightningSystem);
+            GetComponent<AudioSource>().Stop();
         }
     }
     

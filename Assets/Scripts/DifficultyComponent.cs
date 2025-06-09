@@ -16,7 +16,7 @@ public class DifficultyComponent : MonoBehaviour
     void FixedUpdate()
     {
         timeElapsed += Time.fixedDeltaTime;
-        timerText.text = timeElapsed.ToString("00:00");
+        timerText.text = timeElapsed.ToString("0000");
         hitPointsText.text = _playerHealth.hitPoints.ToString();
     }
 }

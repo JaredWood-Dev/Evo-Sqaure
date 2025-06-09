@@ -103,7 +103,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7485c43c2a0b1ba4cb3574ecbd3ac19f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  damage: 5
+  damage: 20
   range: 1
   attackSpeed: 5
   knockback: 10
@@ -111,6 +111,7 @@ MonoBehaviour:
   targetLayer:
     serializedVersion: 2
     m_Bits: 256
+  playerController: {fileID: 0}
   attackDelay: 0.2
   hitMarkTime: 0.1
 --- !u!58 &9057360375965311960
